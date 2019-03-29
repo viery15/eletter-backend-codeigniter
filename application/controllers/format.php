@@ -210,29 +210,50 @@ class format extends CI_Controller
       $post = $this->input->post();
       $output_template = $this->M_format->getTemplate($post['letter_id']);
 
+      $pattern = "/\d{4}\-\d{2}\-\d{2}/";
+
+      foreach ($post as $key => $value) {
+        if (preg_match($pattern, $post[$key], $matches)) {
+           $post[$key] = date('Y-m-d', strtotime($matches[0]));
+           if ($post['Indonesian_date'] == 'true') {
+             $post[$key] = $this->tgl_indo($post[$key]);
+           }
+           else {
+             $post[$key] = date('d F Y', strtotime($post[$key]));
+           }
+        }
+      }
+
+      // print_r($post);
       extract($post);
       for ($i=0; $i < count($output_template); $i++) {
         $output_template[$i]['output_template'] = str_replace("@","$",$output_template[$i]['output_template']);
         $output_template[$i]['output_template'] = str_replace("\"","'",$output_template[$i]['output_template']);
         $output[$i] = $output_template[$i]['output_template'];
         eval("\$output[$i] = \"$output[$i]\";");
-        // echo $output;
       }
-
-      // eval("\$output_template[0]['output_template'] = \"$output_template[0]['output_template']\"");
-      // print_r($output_template[0]['output_template']);
-
-      // $today = date('d M Y');
-      // $output_template = str_replace("@","$",$post['output']);
-      // $output_template = str_replace("\"","'",$output_template);
-      //
-      // extract($post);
       // print_r($output);
       echo json_encode($output);
-      //
-      // eval("\$output_template = \"$output_template\";");
-      //
-      // echo json_encode($output_template);
+
+    }
+
+    public function tgl_indo($tanggal){
+    	$bulan = array (
+    		1 =>   'Januari',
+    		'Februari',
+    		'Maret',
+    		'April',
+    		'Mei',
+    		'Juni',
+    		'Juli',
+    		'Agustus',
+    		'September',
+    		'Oktober',
+    		'November',
+    		'Desember'
+    	);
+    	$pecahkan = explode('-', $tanggal);
+    	return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
     }
 
     public function update($id) {
