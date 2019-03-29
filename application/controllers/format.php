@@ -61,7 +61,7 @@ class format extends CI_Controller
                     $new_data[$i]['html_basic'] = '<textarea class="form-control" id="'.$data[$i]['variable_name'].'"';
                   }
                   elseif ($value == 'date') {
-                    $new_data[$i]['html_basic'] = '<input type="date" class="form-control" id="'.$data[$i]['variable_name'].'"';
+                    $new_data[$i]['html_basic'] = '<input type="date" class="form-control" id="'.$data[$i]['variable_name'].'" value="' . date('Y-m-d') . '"';
                   }
                 }
                 if($attribut != 'type' && $attribut != 'option') {
