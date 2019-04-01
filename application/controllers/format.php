@@ -40,6 +40,24 @@ class format extends CI_Controller
       echo json_encode($parents);
     }
 
+    public function changenik($dept){
+      // print_r($dept);
+      if ($dept != 'all') {
+        $i = 0;
+        foreach (DATA_NIK as $key) {
+          if ($key['department'] == $dept) {
+            $response[$i] = $key;
+            $i++;
+          }
+        }
+
+        echo json_encode($response);
+      }
+      else {
+        echo json_encode(DATA_NIK);
+      }
+    }
+
     public function formInput($id){
       $data = $this->M_data_format->getAll($id);
 
@@ -55,12 +73,19 @@ class format extends CI_Controller
               if ($attribut != 'name' && $attribut != 'variable_name' && $attribut != 'option') {
                 if ($attribut == 'type') {
                   if ($value == 'text' || $value == 'number') {
-                    $new_data[$i]['html_basic'] = '<input type="text" class="form-control" id="'.$data[$i]['variable_name'].'"';
+                    if ($new_data[0]['data_source'] == 'multiple') {
+                      $new_data[$i]['html_basic'] = '<input type="text" class="form-control" id="'.$data[$i]['variable_name'].'" ' . 'name="' . $data[$i]['variable_name'] . '[]"';
+                    }
+                    else {
+                      $new_data[$i]['html_basic'] = '<input type="text" class="form-control" id="'.$data[$i]['variable_name'].'" ';
+                    }
+
                   }
                   elseif ($value == 'textarea') {
                     $new_data[$i]['html_basic'] = '<textarea class="form-control" id="'.$data[$i]['variable_name'].'"';
                   }
                   elseif ($value == 'date') {
+                    $new_data['date'] = 'true';
                     $new_data[$i]['html_basic'] = '<input type="date" class="form-control" id="'.$data[$i]['variable_name'].'" value="' . date('Y-m-d') . '"';
                   }
                 }
@@ -114,8 +139,9 @@ class format extends CI_Controller
           $new_data[$i]['html_basic'] = $new_data[$i]['html_basic'] . '</select>';
         }
       }
-      if ($new_data[0]['data_source'] == 'config') {
+      if ($new_data[0]['data_source'] == 'single' || $new_data[0]['data_source'] == 'multiple') {
         $new_data['config']['nik'] = DATA_NIK;
+        $new_data['data_source'] = $new_data[0]['data_source'];
       }
 
       echo json_encode($new_data);
@@ -140,8 +166,8 @@ class format extends CI_Controller
 
 
       $input['output_template'] = $post['html_output'];
-      if ($post['data_source'] == 'true') {
-          $input['data_source'] = 'config';
+      if ($post['data_source'] != '') {
+          $input['data_source'] = $post['data_source'];
       }
       if ($post['parent'] == 'true') {
           $input['parent'] = 0;
@@ -208,33 +234,59 @@ class format extends CI_Controller
 
     public function submit(){
       $post = $this->input->post();
-      $output_template = $this->M_format->getTemplate($post['letter_id']);
+      if ($post['data_source'] == 'single') {
+        $output_template = $this->M_format->getTemplate($post['letter_id']);
 
-      $pattern = "/\d{4}\-\d{2}\-\d{2}/";
+        $pattern = "/\d{4}\-\d{2}\-\d{2}/";
 
-      foreach ($post as $key => $value) {
-        if (preg_match($pattern, $post[$key], $matches)) {
-           $post[$key] = date('Y-m-d', strtotime($matches[0]));
-           if ($post['Indonesian_date'] == 'true') {
-             $post[$key] = $this->tgl_indo($post[$key]);
-           }
-           else {
-             $post[$key] = date('d F Y', strtotime($post[$key]));
-           }
+        foreach ($post as $key => $value) {
+          if (preg_match($pattern, $post[$key], $matches)) {
+             $post[$key] = date('Y-m-d', strtotime($matches[0]));
+             if ($post['Indonesian_date'] == 'true') {
+               $post[$key] = $this->tgl_indo($post[$key]);
+             }
+             else {
+               $post[$key] = date('d F Y', strtotime($post[$key]));
+             }
+          }
         }
+
+        extract($post);
+        for ($i=0; $i < count($output_template); $i++) {
+          $output_template[$i]['output_template'] = str_replace("@","$",$output_template[$i]['output_template']);
+          $output_template[$i]['output_template'] = str_replace("\"","'",$output_template[$i]['output_template']);
+          $output[$i] = $output_template[$i]['output_template'];
+          eval("\$output[$i] = \"$output[$i]\";");
+        }
+
+        echo json_encode($output);
       }
 
-      // print_r($post);
-      extract($post);
-      for ($i=0; $i < count($output_template); $i++) {
-        $output_template[$i]['output_template'] = str_replace("@","$",$output_template[$i]['output_template']);
-        $output_template[$i]['output_template'] = str_replace("\"","'",$output_template[$i]['output_template']);
-        $output[$i] = $output_template[$i]['output_template'];
-        eval("\$output[$i] = \"$output[$i]\";");
-      }
-      // print_r($output);
-      echo json_encode($output);
+      if ($post['data_source'] == 'multiple') {
+        // print_r($post);
+        $output_template = $this->M_format->getTemplate($post['letter_id']);
+        extract($post);
+        for ($i=0; $i < count($output_template); $i++) {
+          // $output_template[$i]['output_template'] = str_replace("@","$",$output_template[$i]['output_template']);
+          $output_template[$i]['output_template'] = str_replace("\"","'",$output_template[$i]['output_template']);
+          $output[$i] = $output_template[$i]['output_template'];
+          // eval("\$output[$i] = \"$output[$i]\";");
+        }
+        $for_loop = $this->get_string_between($output[0], '##loop##', '##endloop##');
 
+        // print_r($post);
+        foreach ($post['nik'] as $value) {
+          $for_loop = $for_loop . $this->get_string_between($output[0], '##loop##', '##endloop##');
+        }
+        $for_loop = str_replace("@","$",$for_loop);
+        // print_r($for_loop);
+        $value = [
+          '$nama' => 'VIERY DARMAWAN',
+          '$jabatan' => 'Manager',
+        ];
+        $response[0] = strtr($for_loop, $value);
+        echo json_encode($response);
+      }
     }
 
     public function tgl_indo($tanggal){
