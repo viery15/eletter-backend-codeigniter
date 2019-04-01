@@ -87,12 +87,12 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 $data_karyawan = [
   [
     'nik' => '619008',
-    'nama' => 'Viery',
+    'nama' => 'VIERY DARMAWAN',
     'alamat' => 'malang',
     'jabatan' => 'Manager',
     'jenis_kelamin' => 'Laki-laki',
     'tempat_lahir' => 'Malang',
-    'tanggal_lahir' => '13 Desember 1997',
+    'tanggal_lahir' => '1997-12-13',
     'no_ktp' => '999999999999',
   ],
   [
