@@ -144,8 +144,56 @@ class format extends CI_Controller
         $new_data['data_source'] = $new_data[0]['data_source'];
       }
 
+      $output = str_replace("\"","'",$new_data[0]['output_template']);
+      $split = $this->split_output($output);
+      $k = 0;
+      for ($i=0; $i < count($split); $i++) {
+        if (count($split[$i]) == 1) {
+          for ($j=0; $j < count($split[$i]); $j++) {
+            $split[$i][$j] = str_replace("&nbsp;"," ",$split[$i][$j]);
+            $single_component[0] = $this->get_string_between($split[$i][$j], '@', ' ');
+            $temp_output = $this->str_replace_first("@","$",$split[$i][$j]);
+            while ($single_component[$k] != '') {
+              if ($single_component[$k] != '') {
+                $k++;
+                $single_component[$k] = $this->get_string_between($temp_output, '@', ' ');
+                $temp_output = $this->str_replace_first("@","$",$temp_output);
+              }
+            }
+          }
+        }
+        if (count($split[$i]) > 1) {
+          $split[$i][1] = str_replace("&nbsp;"," ",$split[$i][1]);
+          $single_component[$k] = $this->get_string_between($split[$i][1], '@', ' ');
+          $temp_output = $this->str_replace_first("@","$",$split[$i][1]);
+          while ($single_component[$k] != '') {
+            if ($single_component[$k] != '') {
+              $k++;
+              $single_component[$k] = $this->get_string_between($temp_output, '@', ' ');
+              $temp_output = $this->str_replace_first("@","$",$temp_output);
+            }
+          }
+        }
+      }
+      unset($single_component[count($single_component)-1]);
+
+      for ($i=0; $i < count($new_data) - 3; $i++) {
+        for ($j=0; $j < count($single_component); $j++) {
+          if ($new_data[$i]['variable_name'] == $single_component[$j]) {
+            $new_data[$i]['for'] = 'single';
+          }
+        }
+      }
+      // print_r($split);
+      // print_r($single_component);
       echo json_encode($new_data);
-      // print_r(DATA_NIK);
+    }
+
+    function str_replace_first($from, $to, $content){
+
+        $from = '/'.preg_quote($from, '/').'/';
+
+        return preg_replace($from, $to, $content, 1);
     }
 
     public function delete($id){
@@ -164,7 +212,6 @@ class format extends CI_Controller
         $extract[$i] = $this->get_string_between($extract[$i], '@', ' ');
       }
 
-
       $input['output_template'] = $post['html_output'];
       if ($post['data_source'] != '') {
           $input['data_source'] = $post['data_source'];
@@ -180,7 +227,6 @@ class format extends CI_Controller
         $name = $this->M_format->getName($input['parent']);
         $input['index'] = $index->index + 1;
         $input['name'] = $name->name .' '. $input['index'];
-
       }
       // print_r($index);
       $letter_id = $this->M_format->save($input);
@@ -263,30 +309,95 @@ class format extends CI_Controller
       }
 
       if ($post['data_source'] == 'multiple') {
-        // print_r($post);
+
         $output_template = $this->M_format->getTemplate($post['letter_id']);
         extract($post);
+        foreach ($post as $key => $value1) {
+          if (is_array($value1)) {
+            $source[$key] = $value1;
+          }
+        }
+
         for ($i=0; $i < count($output_template); $i++) {
-          // $output_template[$i]['output_template'] = str_replace("@","$",$output_template[$i]['output_template']);
           $output_template[$i]['output_template'] = str_replace("\"","'",$output_template[$i]['output_template']);
           $output[$i] = $output_template[$i]['output_template'];
-          // eval("\$output[$i] = \"$output[$i]\";");
         }
-        $for_loop = $this->get_string_between($output[0], '##loop##', '##endloop##');
 
-        // print_r($post);
-        foreach ($post['nik'] as $value) {
-          $for_loop = $for_loop . $this->get_string_between($output[0], '##loop##', '##endloop##');
+        $split = $this->split_output($output[0]);
+        for ($i=0; $i < count($split); $i++) {
+          if (count($split[$i]) > 1) {
+            $split[$i][0] = $this->inject_loop($split[$i][0], $post);
+
+            $temp = str_replace("@","$",$split[$i][1]);
+            foreach ($source as $key => $value) {
+              if (isset($value[$i])) {
+                ${$key} = $value[$i];
+              }
+
+            }
+
+            eval("\$temp = \"$temp\";");
+            $split[$i][1] = $temp;
+          }
+          if(count($split[$i]) == 1) {
+
+            $temp = str_replace("@","$",$split[$i][0]);
+            foreach ($source as $key => $value) {
+              if (isset($value[$i])) {
+                ${$key} = $value[$i];
+              }
+            }
+
+            eval("\$temp = \"$temp\";");
+            $split[$i][0] = $temp;
+
+          }
         }
-        $for_loop = str_replace("@","$",$for_loop);
-        // print_r($for_loop);
-        $value = [
-          '$nama' => 'VIERY DARMAWAN',
-          '$jabatan' => 'Manager',
-        ];
-        $response[0] = strtr($for_loop, $value);
+
+        $response[0] = '';
+        for ($i=0; $i < count($split); $i++) {
+          for ($j=0; $j < count($split[$i]); $j++) {
+            $response[0] = $response[0] . $split[$i][$j];
+          }
+        }
+        // print_r($split);
         echo json_encode($response);
       }
+    }
+
+    public function split_output($data){
+      $split = explode("<input type='hidden' class='loop' value=''>", $data);
+      for ($i=0; $i < count($split); $i++) {
+        $split[$i] = explode("<input type='hidden' class='endloop' value=''>", $split[$i]);
+      }
+
+      return $split;
+    }
+
+    public function inject_loop($for_loop, $post){
+      foreach ($post as $key => $value1) {
+        if (is_array($value1)) {
+          $source[$key] = $value1;
+        }
+      }
+
+      $response = '';
+      $keys = array_keys($source);
+
+      for($i=0; $i < count($post['nik']); $i++) {
+        $for_loop = str_replace("@","$",$for_loop);
+
+        foreach ($source as $key => $value) {
+          if (isset($value[$i])) {
+            ${$key} = $value[$i];
+          }
+        }
+
+        $response = $response . $for_loop;
+        eval("\$response = \"$response\";");
+      }
+
+      return $response;
     }
 
     public function tgl_indo($tanggal){
