@@ -238,7 +238,6 @@ class format extends CI_Controller
 
       $variable_name = array_unique($extract);
       $variable_name = array_values($variable_name);
-      // print_r($component_exist);
 
       if ($post['parent'] == 'false') {
         for ($i=1; $i < count($variable_name); $i++) {
@@ -246,7 +245,6 @@ class format extends CI_Controller
           for ($j=0; $j < count($component_exist); $j++) {
             if ($variable_name[$i] == $component_exist[$j]['variable_name']) {
               $same++;
-              // break;
             }
           }
           if ($same == 0) {
@@ -261,10 +259,12 @@ class format extends CI_Controller
 
       if ($post['parent'] == 'true') {
         for ($i=1; $i < count($variable_name); $i++) {
+          if ($variable_name[$i] != 'nik') {
             $id = $this->M_component->getId($variable_name[$i]);
             $input2['component_id'] = $id->id;
 
             $this->M_data_format->save($input2);
+          }
         }
       }
     }
