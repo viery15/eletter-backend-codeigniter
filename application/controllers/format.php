@@ -85,8 +85,15 @@ class format extends CI_Controller
                     $new_data[$i]['html_basic'] = '<textarea class="form-control" id="'.$data[$i]['variable_name'].'"';
                   }
                   elseif ($value == 'date') {
-                    $new_data['date'] = 'true';
-                    $new_data[$i]['html_basic'] = '<input type="date" class="form-control" id="'.$data[$i]['variable_name'].'" value="' . date('Y-m-d') . '"';
+                    if ($new_data[0]['data_source'] == 'multiple') {
+                      $new_data['date'] = 'true';
+                      $new_data[$i]['html_basic'] = '<input type="date" class="form-control" id="'.$data[$i]['variable_name'].'" value="' . date('Y-m-d') . '" ' . 'name="' . $data[$i]['variable_name'] . '[]"';
+                    }
+                    else {
+                      $new_data['date'] = 'true';
+                      $new_data[$i]['html_basic'] = '<input type="date" class="form-control" id="'.$data[$i]['variable_name'].'" value="' . date('Y-m-d') . '"';
+                    }
+
                   }
                 }
                 if($attribut != 'type' && $attribut != 'option') {
@@ -311,6 +318,24 @@ class format extends CI_Controller
       if ($post['data_source'] == 'multiple') {
 
         $output_template = $this->M_format->getTemplate($post['letter_id']);
+
+        $pattern = "/\d{4}\-\d{2}\-\d{2}/";
+
+        foreach ($post as $key => $value) {
+          for ($i=0; $i < count($post[$key]); $i++) {
+            if (preg_match($pattern, $post[$key][$i], $matches)) {
+               $post[$key][$i] = date('Y-m-d', strtotime($matches[0]));
+               if ($post['Indonesian_date'] == 'true') {
+                 $post[$key][$i] = $this->tgl_indo($post[$key][$i]);
+               }
+               else {
+                 $post[$key][$i] = date('d F Y', strtotime($post[$key][$i]));
+               }
+            }
+          }
+
+        }
+
         extract($post);
         foreach ($post as $key => $value1) {
           if (is_array($value1)) {
@@ -360,7 +385,7 @@ class format extends CI_Controller
             $response[0] = $response[0] . $split[$i][$j];
           }
         }
-        // print_r($split);
+        // print_r($post);
         echo json_encode($response);
       }
     }
