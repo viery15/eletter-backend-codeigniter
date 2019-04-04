@@ -95,6 +95,9 @@ $data_karyawan = [
     'tanggal_lahir' => '1997-12-13',
     'no_ktp' => '999999999999',
     'department' => 'IT',
+    'title' => 'Yard Attendant',
+    'grade' => '8 (bc)',
+    'cc' => 'P05101',
   ],
   [
     'nik' => '619009',
@@ -106,6 +109,9 @@ $data_karyawan = [
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
     'department' => 'HR',
+    'title' => 'Yard Attendant',
+    'grade' => '8 (bc)',
+    'cc' => 'P05101',
   ],
   [
     'nik' => '619001',
@@ -117,6 +123,9 @@ $data_karyawan = [
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
     'department' => 'PPC',
+    'title' => 'Yard Attendant',
+    'grade' => '8 (bc)',
+    'cc' => 'P05101',
   ],
   [
     'nik' => '619002',
@@ -128,6 +137,9 @@ $data_karyawan = [
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
     'department' => 'HR',
+    'title' => 'Yard Attendant',
+    'grade' => '8 (bc)',
+    'cc' => 'P05101',
   ],
   [
     'nik' => '619003',
@@ -139,6 +151,9 @@ $data_karyawan = [
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
     'department' => 'HR',
+    'title' => 'Yard Attendant',
+    'grade' => '8 (bc)',
+    'cc' => 'P05101',
   ],
   [
     'nik' => '619004',
@@ -150,6 +165,9 @@ $data_karyawan = [
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
     'department' => 'HR',
+    'title' => 'Yard Attendant',
+    'grade' => '8 (bc)',
+    'cc' => 'P05101',
   ],
   [
     'nik' => '619005',
@@ -161,6 +179,9 @@ $data_karyawan = [
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
     'department' => 'PPC',
+    'title' => 'Yard Attendant',
+    'grade' => '8 (bc)',
+    'cc' => 'P05101',
   ],
   [
     'nik' => '619006',
@@ -172,6 +193,9 @@ $data_karyawan = [
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
     'department' => 'PPC',
+    'title' => 'Yard Attendant',
+    'grade' => '8 (bc)',
+    'cc' => 'P05101',
   ],
   [
     'nik' => '619007',
@@ -183,6 +207,9 @@ $data_karyawan = [
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
     'department' => 'IT',
+    'title' => 'Yard Attendant',
+    'grade' => '8 (bc)',
+    'cc' => 'P05101',
   ],
   [
     'nik' => '619010',
@@ -194,6 +221,9 @@ $data_karyawan = [
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
     'department' => 'IT',
+    'title' => 'Yard Attendant',
+    'grade' => '8 (bc)',
+    'cc' => 'P05101',
   ]
 ];
 // $dt = DATA_NIK;

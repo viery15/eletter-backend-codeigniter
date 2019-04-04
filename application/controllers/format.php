@@ -383,11 +383,14 @@ class format extends CI_Controller
 
       $response = '';
       $keys = array_keys($source);
-
+      $idx = 1;
       for($i=0; $i < count($post['nik']); $i++) {
+
         $for_loop = str_replace("@","$",$for_loop);
 
+        $for_loop = str_replace("#idx#",'$idx',$for_loop);
         foreach ($source as $key => $value) {
+
           if (isset($value[$i])) {
             ${$key} = $value[$i];
           }
@@ -395,6 +398,7 @@ class format extends CI_Controller
 
         $response = $response . $for_loop;
         eval("\$response = \"$response\";");
+        $idx++;
       }
 
       return $response;
