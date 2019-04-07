@@ -13,6 +13,7 @@ class format extends CI_Controller
         $this->load->model("M_component");
         $this->load->model("M_format");
         $this->load->model("M_data_format");
+        $this->load->model("M_user");
     }
 
     public function index()
@@ -22,16 +23,21 @@ class format extends CI_Controller
       echo json_encode($data);
     }
 
-    public function letterFormat(){
-      $format = $this->M_format->getLetterName();
+    public function letterFormat($nik){
+      $access = $this->M_user->getAccess($nik);
+      if ($access->access != 'all') {
+        $access = json_decode($access->access);
 
-      // $i = 0;
-      // foreach ($format as $key) {
-      //   $format_name[$i] = $key['name'];
-      //   $i++;
-      // }
+        for ($i=0; $i < count($access); $i++) {
+          $access[$i] = $this->M_format->getLetterName($access[$i]);
+        }
+      }
+      else {
+        $access = $this->M_format->getLetterNameAll();
+      }
 
-      echo json_encode($format);
+
+      echo json_encode($access);
     }
 
     public function parent(){

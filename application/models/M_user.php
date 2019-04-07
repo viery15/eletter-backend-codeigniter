@@ -9,10 +9,21 @@ class M_user extends CI_Model
       return $this->db->get($this->_table)->result_array();
     }
 
+    public function getbyNIK($nik) {
+      $this->db->where('nik', $nik);
+      return $this->db->get($this->_table)->row();
+    }
+
     public function getLetterName(){
       // $this->db->select('name');
       $this->db->where('parent', '0');
       return $this->db->get($this->_table)->result_array();
+    }
+
+    public function getAccess($nik) {
+      $this->db->where('nik', $nik);
+      return $this->db->get($this->_table)->row();
+
     }
 
     public function getLastIndex($id){

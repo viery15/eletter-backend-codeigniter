@@ -38,20 +38,20 @@ class User extends CI_Controller {
     $user_exist = $this->M_user->getAll();
     $data = DATA_USER;
 
-    for ($i=0; $i < count($data); $i++) {
-      foreach ($user_exist as $key => $value) {
-        if ($data[$i]['nik'] == $value['nik']) {
-          unset($data[$i]);
-          $data = array_values($data);
-        }
-      }
-    }
+    // for ($i=0; $i < count($data); $i++) {
+    //   foreach ($user_exist as $key => $value) {
+    //     if ($data[$i]['nik'] == $value['nik']) {
+    //       unset($data[$i]);
+    //       $data = array_values($data);
+    //     }
+    //   }
+    // }
 
     for ($i=0; $i < count($data); $i++) {
       $data[$i]['label'] = $data[$i]['nik'] . ' - '. $data[$i]['nama'];
     }
 
-    // echo json_encode($data);
+    echo json_encode($data);
 
   }
 
@@ -78,13 +78,13 @@ class User extends CI_Controller {
 
   public function login(){
     $post = $this->input->post();
+    $get_user = $this->M_user->getbyNIK($post['nik']);
     $key = "giselle_key";
-    if ($post['nik'] == '619008') {
+    if ($get_user) {
       $token = array(
-          "iss" => "http://example.org",
-          "admin" => "admin",
-          "nik" => '619008',
-          "name" => 'viery darmawan'
+          "admin" => $get_user->role,
+          "nik" => $get_user->nik,
+          "name" => $get_user->name,
       );
 
       $jwt = JWT::encode($token, $key);
@@ -95,6 +95,7 @@ class User extends CI_Controller {
       ];
 
       echo json_encode($response);
+
     }
     else {
       $response = [
@@ -102,5 +103,31 @@ class User extends CI_Controller {
       ];
       echo json_encode($response);
     }
+
+
+
+    // if ($post['nik'] == '619008') {
+    //   $token = array(
+    //       "iss" => "http://example.org",
+    //       "admin" => "admin",
+    //       "nik" => '619008',
+    //       "name" => 'viery darmawan'
+    //   );
+    //
+    //   $jwt = JWT::encode($token, $key);
+    //
+    //   $response = [
+    //     'msg' => 'Login successful',
+    //     'token' => $jwt
+    //   ];
+    //
+    //   // echo json_encode($response);
+    // }
+    // else {
+    //   $response = [
+    //     'msg' => 'Invalid Credential!'
+    //   ];
+    //   // echo json_encode($response);
+    // }
   }
 }
