@@ -285,10 +285,15 @@ class format extends CI_Controller
         return substr($string, $ini, $len);
     }
 
+    public function month_romawi($month){
+      $rom = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+      return $rom[$month-1];
+    }
+
     public function generate_code($code) {
       $dictionary = [
         'year' => date('Y'),
-        'm_rom' => 'IV',
+        'm_rom' => $this->month_romawi(date('n')),
         'today' => $this->tgl_indo(date('Y-m-d')),
       ];
 
@@ -330,14 +335,24 @@ class format extends CI_Controller
           eval("\$output[$i] = \"$output[$i]\";");
         }
 
-        $code = explode("#", $output[0]);
-        $final = $this->generate_code($code);
-
-        $return[0] = '';
-        for ($i=0; $i < count($final); $i++) {
-          $return[0] = $return[0] . $final[$i];
+        for ($i=0; $i < count($output); $i++) {
+          $code = explode("#", $output[$i]);
+          $final = $this->generate_code($code);
+          $output[$i] = '';
+          for ($j=0; $j < count($final); $j++) {
+            $output[$i] = $output[$i] . $final[$j];
+          }
         }
-        echo json_encode($return);
+
+        // $code = explode("#", $output[0]);
+        // $final = $this->generate_code($code);
+        //
+        // $return[0] = '';
+        // for ($i=0; $i < count($final); $i++) {
+        //   $return[0] = $return[0] . $final[$i];
+        // }
+        echo json_encode($output);
+        // print_r($final);
       }
 
       if ($post['data_source'] == 'multiple') {
