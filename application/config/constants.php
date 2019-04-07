@@ -84,6 +84,21 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
+$data_user = [
+  [
+    'nik' => '619008',
+    'nama' => 'Viery Darmawan',
+  ],
+  [
+    'nik' => '619010',
+    'nama' => 'Sulis',
+  ],
+  [
+    'nik' => '619009',
+    'nama' => 'Ade',
+  ],
+];
+
 $data_karyawan = [
   [
     'nik' => '619008',
@@ -94,6 +109,7 @@ $data_karyawan = [
     'tempat_lahir' => 'Malang',
     'tanggal_lahir' => '1997-12-13',
     'no_ktp' => '999999999999',
+    'tanggal_bergabung' => '10 Januari 2019',
     'department' => 'IT',
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
@@ -108,6 +124,7 @@ $data_karyawan = [
     'tempat_lahir' => 'Batam',
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
+    'tanggal_bergabung' => '10 Januari 2019',
     'department' => 'HR',
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
@@ -122,6 +139,7 @@ $data_karyawan = [
     'tempat_lahir' => 'Batam',
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
+    'tanggal_bergabung' => '10 Januari 2019',
     'department' => 'PPC',
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
@@ -136,6 +154,7 @@ $data_karyawan = [
     'tempat_lahir' => 'Batam',
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
+    'tanggal_bergabung' => '10 Januari 2019',
     'department' => 'HR',
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
@@ -150,6 +169,7 @@ $data_karyawan = [
     'tempat_lahir' => 'Batam',
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
+    'tanggal_bergabung' => '10 Januari 2019',
     'department' => 'HR',
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
@@ -164,6 +184,7 @@ $data_karyawan = [
     'tempat_lahir' => 'Batam',
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
+    'tanggal_bergabung' => '10 Januari 2019',
     'department' => 'HR',
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
@@ -178,6 +199,7 @@ $data_karyawan = [
     'tempat_lahir' => 'Batam',
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
+    'tanggal_bergabung' => '10 Januari 2019',
     'department' => 'PPC',
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
@@ -192,6 +214,7 @@ $data_karyawan = [
     'tempat_lahir' => 'Batam',
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
+    'tanggal_bergabung' => '10 Januari 2019',
     'department' => 'PPC',
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
@@ -206,6 +229,7 @@ $data_karyawan = [
     'tempat_lahir' => 'Batam',
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
+    'tanggal_bergabung' => '10 Januari 2019',
     'department' => 'IT',
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
@@ -220,6 +244,7 @@ $data_karyawan = [
     'tempat_lahir' => 'Batam',
     'tanggal_lahir' => '30 Februari 1998',
     'no_ktp' => '8888888888888',
+    'tanggal_bergabung' => '10 Januari 2019',
     'department' => 'IT',
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
@@ -229,3 +254,4 @@ $data_karyawan = [
 // $dt = DATA_NIK;
 
 defined('DATA_NIK')      OR define('DATA_NIK', $data_karyawan);
+defined('DATA_USER')      OR define('DATA_USER', $data_user);

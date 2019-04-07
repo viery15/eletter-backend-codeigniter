@@ -285,6 +285,24 @@ class format extends CI_Controller
         return substr($string, $ini, $len);
     }
 
+    public function generate_code($code) {
+      $dictionary = [
+        'year' => date('Y'),
+        'm_rom' => 'IV',
+        'today' => $this->tgl_indo(date('Y-m-d')),
+      ];
+
+      for ($i=0; $i < count($code); $i++) {
+        foreach ($dictionary as $key => $value) {
+          if ($code[$i] == $key) {
+            $code[$i] = $value;
+          }
+        }
+      }
+
+      return $code;
+    }
+
     public function submit(){
       $post = $this->input->post();
       if ($post['data_source'] == 'single') {
@@ -312,7 +330,14 @@ class format extends CI_Controller
           eval("\$output[$i] = \"$output[$i]\";");
         }
 
-        echo json_encode($output);
+        $code = explode("#", $output[0]);
+        $final = $this->generate_code($code);
+
+        $return[0] = '';
+        for ($i=0; $i < count($final); $i++) {
+          $return[0] = $return[0] . $final[$i];
+        }
+        echo json_encode($return);
       }
 
       if ($post['data_source'] == 'multiple') {

@@ -37,15 +37,15 @@ class component extends CI_Controller
         }
       }
 
-      for ($i=0; $i < count($data); $i++) {
-        foreach ($variable_name as $key => $value) {
-          if ($data[$i] == $value['variable_name']) {
-            // echo $data[$i];
-            unset($data[$i]);
-            $data = array_values($data);
-          }
-        }
-      }
+      // for ($i=0; $i < count($data); $i++) {
+      //   foreach ($variable_name as $key => $value) {
+      //     if ($data[$i] == $value['variable_name']) {
+      //       // echo $data[$i];
+      //       unset($data[$i]);
+      //       $data = array_values($data);
+      //     }
+      //   }
+      // }
 
       echo json_encode($data);
     }
