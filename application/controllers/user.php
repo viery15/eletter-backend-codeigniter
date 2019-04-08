@@ -22,16 +22,21 @@ class User extends CI_Controller {
     $data = $this->M_user->getAll();
 
     for ($i=0; $i < count($data); $i++) {
-      if ($data[$i]['access'] != 'all') {
+
         $data[$i]['access'] = json_decode($data[$i]['access']);
         for ($j=0; $j < count($data[$i]['access']); $j++) {
           $temp = $this->M_format->getName($data[$i]['access'][$j]);
           $data[$i]['access'][$j] = $temp->name;
         }
+
+    }
+
+    for ($i=0; $i < count($data); $i++) {
+      if (is_null($data[$i]['access'])) {
+        $data[$i]['access'][0] = 'ALL';
       }
     }
     echo json_encode($data);
-
 	}
 
   public function configUser(){

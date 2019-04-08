@@ -6,6 +6,7 @@ class M_format extends CI_Model
 
     public function getAll(){
       $this->db->order_by('id','DESC');
+      $this->db->where('parent', '0');
       return $this->db->get($this->_table)->result_array();
     }
 

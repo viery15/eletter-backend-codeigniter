@@ -23,6 +23,12 @@ class format extends CI_Controller
       echo json_encode($data);
     }
 
+    public function getFormat(){
+      $data = $this->M_format->getAll();
+
+      echo json_encode($data);
+    }
+
     public function letterFormat($nik){
       $access = $this->M_user->getAccess($nik);
       if ($access->access != 'all') {
@@ -47,20 +53,23 @@ class format extends CI_Controller
     }
 
     public function changenik($dept){
-      // print_r($dept);
+      $temp_nik = DATA_NIK;
+      for ($i=0; $i < count($temp_nik); $i++) {
+        $temp_nik[$i]['label'] = $temp_nik[$i]['nik'] . ' - ' . $temp_nik[$i]['nama'];
+      }
+
       if ($dept != 'all') {
         $i = 0;
-        foreach (DATA_NIK as $key) {
+        foreach ($temp_nik as $key) {
           if ($key['department'] == $dept) {
             $response[$i] = $key;
             $i++;
           }
         }
-
         echo json_encode($response);
       }
       else {
-        echo json_encode(DATA_NIK);
+        echo json_encode($temp_nik);
       }
     }
 
@@ -154,6 +163,9 @@ class format extends CI_Controller
       }
       if ($new_data[0]['data_source'] == 'single' || $new_data[0]['data_source'] == 'multiple') {
         $new_data['config']['nik'] = DATA_NIK;
+        for ($d=0; $d < count($new_data['config']['nik']); $d++) {
+          $new_data['config']['nik'][$d]['label'] = $new_data['config']['nik'][$d]['nik'] . ' - ' . $new_data['config']['nik'][$d]['nama'];
+        }
         $new_data['data_source'] = $new_data[0]['data_source'];
       }
 
