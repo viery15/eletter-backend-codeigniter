@@ -14,6 +14,11 @@ class M_user extends CI_Model
       return $this->db->get($this->_table)->row();
     }
 
+    public function getByID($id){
+      $this->db->where('id', $id);
+      return $this->db->get($this->_table)->result_array();
+    }
+
     public function getLetterName(){
       // $this->db->select('name');
       $this->db->where('parent', '0');

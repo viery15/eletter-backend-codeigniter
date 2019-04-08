@@ -20,13 +20,16 @@ class User extends CI_Controller {
 	public function index()
 	{
     $data = $this->M_user->getAll();
-
     for ($i=0; $i < count($data); $i++) {
 
         $data[$i]['access'] = json_decode($data[$i]['access']);
-        for ($j=0; $j < count($data[$i]['access']); $j++) {
-          $temp = $this->M_format->getName($data[$i]['access'][$j]);
-          $data[$i]['access'][$j] = $temp->name;
+        if (is_array($data[$i]['access'])) {
+          for ($j=0; $j < count($data[$i]['access']); $j++) {
+            $temp = $this->M_format->getName($data[$i]['access'][$j]);
+            if ($temp != null) {
+              $data[$i]['access'][$j] = $temp->name;
+            }
+          }
         }
 
     }
@@ -38,6 +41,45 @@ class User extends CI_Controller {
     }
     echo json_encode($data);
 	}
+
+  public function edit($id){
+    $data = $this->M_user->getByID($id);
+    for ($i=0; $i < count($data); $i++) {
+        $data[$i]['access'] = json_decode($data[$i]['access']);
+        for ($j=0; $j < count($data[$i]['access']); $j++) {
+          $temp = $this->M_format->getName($data[$i]['access'][$j]);
+          $data[$i]['access'][$j] = $temp->name;
+        }
+
+    }
+
+    for ($i=0; $i < count($data); $i++) {
+      $data[$i]['label'] = $data[$i]['nik'] . ' - ' . $data[$i]['name'];
+      if (is_null($data[$i]['access'])) {
+        $data[$i]['access'][0] = 'ALL';
+      }
+    }
+    $response = $data[0];
+
+    echo json_encode($response);
+  }
+
+  public function update($id){
+    $post = $this->input->post();
+
+    $input['nik'] = $post['nik'];
+    $input['name'] = $post['name'];
+    $input['role'] = $post['role'];
+    if ($post['access'] == '') {
+      $input['access'] = 'all';
+    }
+    else {
+      $input['access'] = json_encode($post['access']);
+    }
+
+    $this->M_user->update($id,$input);
+
+  }
 
   public function configUser(){
     $user_exist = $this->M_user->getAll();

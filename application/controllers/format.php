@@ -155,7 +155,12 @@ class format extends CI_Controller
           $new_data[$i]['html_basic'] = $new_data[$i]['html_basic'] . 'name="'.$new_data[$i]['variable_name'].'">';
         }
         elseif ($new_data[$i]['attribut']['type'] == 'textarea') {
-          $new_data[$i]['html_basic'] = $new_data[$i]['html_basic'] . 'name="' . $new_data[$i]['variable_name'] . '"></textarea>';
+          $cek = '';
+          if (isset($new_data[$i]['attribut']['value'])) {
+            $cek = $new_data[$i]['attribut']['value'];
+          }
+
+          $new_data[$i]['html_basic'] = $new_data[$i]['html_basic'] . 'name="' . $new_data[$i]['variable_name'] . '">'.$cek.'</textarea>';
         }
         elseif ($new_data[$i]['attribut']['type'] == 'dropdown') {
           $new_data[$i]['html_basic'] = $new_data[$i]['html_basic'] . '</select>';
@@ -313,6 +318,7 @@ class format extends CI_Controller
         'year' => date('Y'),
         'm_rom' => $this->month_romawi(date('n')),
         'today' => $this->tgl_indo(date('Y-m-d')),
+        'indonesian_day' => 'Senin',
       ];
 
       for ($i=0; $i < count($code); $i++) {
