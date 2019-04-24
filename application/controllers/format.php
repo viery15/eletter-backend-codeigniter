@@ -18,13 +18,19 @@ class format extends CI_Controller
 
     public function index()
     {
-      $data = $this->M_format->getAll();
+      $data = $this->M_format->getAllFormat();
 
       echo json_encode($data);
     }
 
     public function getFormat(){
       $data = $this->M_format->getAll();
+
+      echo json_encode($data);
+    }
+
+    public function edit($id){
+      $data = $this->M_format->getById($id);
 
       echo json_encode($data);
     }
@@ -258,7 +264,7 @@ class format extends CI_Controller
         $input['index'] = $index->index + 1;
         $input['name'] = $name->name .' '. $input['index'];
       }
-      // print_r($index);
+      $input['page_number'] = $post['pageNumber'];
       $letter_id = $this->M_format->save($input);
       if ($post['parent'] == 'false') {
         $letter_id = $post['parent_id'];
@@ -278,10 +284,13 @@ class format extends CI_Controller
             }
           }
           if ($same == 0) {
-            $id = $this->M_component->getId($variable_name[$i]);
-            $input2['component_id'] = $id->id;
+            if ($variable_name[$i] != 'nik') {
+              $id = $this->M_component->getId($variable_name[$i]);
+              $input2['component_id'] = $id->id;
 
-            $this->M_data_format->save($input2);
+              $this->M_data_format->save($input2);
+            }
+
           }
 
         }
@@ -313,12 +322,26 @@ class format extends CI_Controller
       return $rom[$month-1];
     }
 
+    public function indo_day($input){
+      $day = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+
+      for ($i=0; $i < count($day); $i++) {
+        if ($day[$i] == $input) {
+          return $hari[$i];
+        }
+      }
+
+    }
+
     public function generate_code($code) {
       $dictionary = [
         'year' => date('Y'),
         'm_rom' => $this->month_romawi(date('n')),
         'today' => $this->tgl_indo(date('Y-m-d')),
-        'indonesian_day' => 'Senin',
+        'indonesian_day' => $this->indo_day(date('l')),
+        'break' => '<div style="page-break-after:always;"></div>',
+        'logo_ct' => '<img style="left:0;top:0;position:absolute;width:30px" src="logo.png"/>',
       ];
 
       for ($i=0; $i < count($code); $i++) {
@@ -334,6 +357,7 @@ class format extends CI_Controller
 
     public function submit(){
       $post = $this->input->post();
+
       if ($post['data_source'] == 'single') {
         $output_template = $this->M_format->getTemplate($post['letter_id']);
 
@@ -352,6 +376,7 @@ class format extends CI_Controller
         }
 
         extract($post);
+        // print_r($post);
         for ($i=0; $i < count($output_template); $i++) {
           $output_template[$i]['output_template'] = str_replace("@","$",$output_template[$i]['output_template']);
           $output_template[$i]['output_template'] = str_replace("\"","'",$output_template[$i]['output_template']);
@@ -449,6 +474,14 @@ class format extends CI_Controller
             $response[0] = $response[0] . $split[$i][$j];
           }
         }
+        for ($i=0; $i < count($response); $i++) {
+          $code = explode("#", $response[$i]);
+          $final = $this->generate_code($code);
+          $response[$i] = '';
+          for ($j=0; $j < count($final); $j++) {
+            $response[$i] = $response[$i] . $final[$j];
+          }
+        }
         // print_r($post);
         echo json_encode($response);
       }
@@ -514,8 +547,79 @@ class format extends CI_Controller
 
     public function update($id) {
       $post = $this->input->post();
+      $this->M_data_format->deleteByLetterId($id);
+      // print_r($post);
 
-      print_r($post);
+      $extract = explode("@",$post['html_output']);
+
+      for ($i=0; $i < count($extract); $i++) {
+        $extract[$i] = '@'.$extract[$i];
+        $extract[$i] = str_replace("&nbsp;"," ",$extract[$i]);
+        $extract[$i] = $this->get_string_between($extract[$i], '@', ' ');
+      }
+
+      $input['output_template'] = $post['html_output'];
+      if ($post['data_source'] != '') {
+          $input['data_source'] = $post['data_source'];
+      }
+      if ($post['parent'] == 'true') {
+          $input['parent'] = 0;
+          $input['index'] = 0;
+          $input['name'] = $post['letter_name'];
+      }
+      elseif ($post['parent'] == 'false') {
+        $input['parent'] = $post['parent_id'];
+        $index = $this->M_format->getLastIndex($input['parent']);
+        $name = $this->M_format->getName($input['parent']);
+        $input['index'] = $index->index + 1;
+        $input['name'] = $name->name .' '. $input['index'];
+      }
+      // print_r($index);
+      $input['page_number'] = $post['pageNumber'];
+      $letter_id = $id;
+      $this->M_format->update($id, $input);
+
+      if ($post['parent'] == 'false') {
+        $letter_id = $post['parent_id'];
+        $component_exist = $this->M_data_format->getAll($post['parent_id']);
+      }
+      $input2['letter_format_id'] = $letter_id;
+
+      $variable_name = array_unique($extract);
+      $variable_name = array_values($variable_name);
+
+      if ($post['parent'] == 'false') {
+        for ($i=1; $i < count($variable_name); $i++) {
+          $same = 0;
+          for ($j=0; $j < count($component_exist); $j++) {
+            if ($variable_name[$i] == $component_exist[$j]['variable_name']) {
+              $same++;
+            }
+          }
+          if ($same == 0) {
+            if ($variable_name[$i] != 'nik') {
+              $id = $this->M_component->getId($variable_name[$i]);
+              $input2['component_id'] = $id->id;
+
+              $this->M_data_format->save($input2);
+            }
+
+          }
+
+        }
+      }
+
+      if ($post['parent'] == 'true') {
+        for ($i=1; $i < count($variable_name); $i++) {
+          if ($variable_name[$i] != 'nik') {
+            $id = $this->M_component->getId($variable_name[$i]);
+            $input2['component_id'] = $id->id;
+
+            $this->M_data_format->save($input2);
+          }
+        }
+      }
+
     }
 
 

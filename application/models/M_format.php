@@ -10,9 +10,19 @@ class M_format extends CI_Model
       return $this->db->get($this->_table)->result_array();
     }
 
+    public function getAllFormat(){
+      $this->db->order_by('id','DESC');
+      return $this->db->get($this->_table)->result_array();
+    }
+
     public function getLetterName($id){
       // $this->db->select('name');
       $this->db->where('parent', '0');
+      $this->db->where('id', $id);
+      return $this->db->get($this->_table)->row();
+    }
+
+    public function getById($id) {
       $this->db->where('id', $id);
       return $this->db->get($this->_table)->row();
     }

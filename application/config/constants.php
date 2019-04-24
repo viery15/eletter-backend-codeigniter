@@ -103,7 +103,7 @@ $data_karyawan = [
   [
     'nik' => '619008',
     'nama' => 'Viery Darmawan',
-    'alamat' => 'malang',
+    'alamat' => 'Perum. Muka Kuning Permai II No. 220 RT/RW: 006/020, Kel. Buliang, Kec. Batu Aji - Batam',
     'jabatan' => 'Manager',
     'jenis_kelamin' => 'Laki-laki',
     'tempat_lahir' => 'Malang',
@@ -114,6 +114,13 @@ $data_karyawan = [
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
     'cc' => 'P05101',
+    'gaji_pokok' => '100.000.000',
+    'tunjangan_transport' => '30.000',
+    'tunjangan_makan' => '20.000',
+    'status_keluarga' => 'Menikah',
+    'status_gol_gaji' => 'Staff',
+    'tanggungan_keluarga' => '1',
+    'status_pajak' => 'TK0'
   ],
   [
     'nik' => '619009',
@@ -129,6 +136,13 @@ $data_karyawan = [
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
     'cc' => 'P05101',
+    'gaji_pokok' => '100.000.000',
+    'tunjangan_transport' => '30.000',
+    'tunjangan_makan' => '20.000',
+    'status_keluarga' => 'Menikah',
+    'status_gol_gaji' => 'Staff',
+    'tanggungan_keluarga' => '1',
+    'status_pajak' => 'TK0'
   ],
   [
     'nik' => '619001',
@@ -144,6 +158,13 @@ $data_karyawan = [
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
     'cc' => 'P05101',
+    'gaji_pokok' => '100.000.000',
+    'tunjangan_transport' => '30.000',
+    'tunjangan_makan' => '20.000',
+    'status_keluarga' => 'Menikah',
+    'status_gol_gaji' => 'Staff',
+    'tanggungan_keluarga' => '1',
+    'status_pajak' => 'TK0'
   ],
   [
     'nik' => '619002',
@@ -159,6 +180,13 @@ $data_karyawan = [
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
     'cc' => 'P05101',
+    'gaji_pokok' => '100.000.000',
+    'tunjangan_transport' => '30.000',
+    'tunjangan_makan' => '20.000',
+    'status_keluarga' => 'Menikah',
+    'status_gol_gaji' => 'Staff',
+    'tanggungan_keluarga' => '1',
+    'status_pajak' => 'TK0'
   ],
   [
     'nik' => '619003',
@@ -174,6 +202,13 @@ $data_karyawan = [
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
     'cc' => 'P05101',
+    'gaji_pokok' => '100.000.000',
+    'tunjangan_transport' => '30.000',
+    'tunjangan_makan' => '20.000',
+    'status_keluarga' => 'Menikah',
+    'status_gol_gaji' => 'Staff',
+    'tanggungan_keluarga' => '1',
+    'status_pajak' => 'TK0'
   ],
   [
     'nik' => '619004',
@@ -189,6 +224,13 @@ $data_karyawan = [
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
     'cc' => 'P05101',
+    'gaji_pokok' => '100.000.000',
+    'tunjangan_transport' => '30.000',
+    'tunjangan_makan' => '20.000',
+    'status_keluarga' => 'Menikah',
+    'status_gol_gaji' => 'Staff',
+    'tanggungan_keluarga' => '1',
+    'status_pajak' => 'TK0'
   ],
   [
     'nik' => '619005',
@@ -204,6 +246,13 @@ $data_karyawan = [
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
     'cc' => 'P05101',
+    'gaji_pokok' => '100.000.000',
+    'tunjangan_transport' => '30.000',
+    'tunjangan_makan' => '20.000',
+    'status_keluarga' => 'Menikah',
+    'status_gol_gaji' => 'Staff',
+    'tanggungan_keluarga' => '1',
+    'status_pajak' => 'TK0'
   ],
   [
     'nik' => '619006',
@@ -219,6 +268,13 @@ $data_karyawan = [
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
     'cc' => 'P05101',
+    'gaji_pokok' => '100.000.000',
+    'tunjangan_transport' => '30.000',
+    'tunjangan_makan' => '20.000',
+    'status_keluarga' => 'Menikah',
+    'status_gol_gaji' => 'Staff',
+    'tanggungan_keluarga' => '1',
+    'status_pajak' => 'TK0'
   ],
   [
     'nik' => '619007',
@@ -234,6 +290,13 @@ $data_karyawan = [
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
     'cc' => 'P05101',
+    'gaji_pokok' => '100.000.000',
+    'tunjangan_transport' => '30.000',
+    'tunjangan_makan' => '20.000',
+    'status_keluarga' => 'Menikah',
+    'status_gol_gaji' => 'Staff',
+    'tanggungan_keluarga' => '1',
+    'status_pajak' => 'TK0'
   ],
   [
     'nik' => '619010',
@@ -249,6 +312,13 @@ $data_karyawan = [
     'title' => 'Yard Attendant',
     'grade' => '8 (bc)',
     'cc' => 'P05101',
+    'gaji_pokok' => '100.000.000',
+    'tunjangan_transport' => '30.000',
+    'tunjangan_makan' => '20.000',
+    'status_keluarga' => 'Menikah',
+    'status_gol_gaji' => 'Staff',
+    'tanggungan_keluarga' => '1',
+    'status_pajak' => 'TK0'
   ]
 ];
 // $dt = DATA_NIK;
